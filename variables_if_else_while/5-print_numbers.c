@@ -1,6 +1,7 @@
 #include <stdio.h>
+
 /**
- * main - prints 0-9
+ * main - Prints digits 0-9
  * Return: Always 0
  */
 int main(void)

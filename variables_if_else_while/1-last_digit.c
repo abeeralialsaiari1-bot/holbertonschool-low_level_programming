@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+
 /**
- * main - prints the last digit of n
+ * main - Prints the last digit of n and some conditions
  * Return: Always 0
  */
 int main(void)

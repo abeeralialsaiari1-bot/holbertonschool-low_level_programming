@@ -1,13 +1,14 @@
 #include <stdio.h>
+
 /**
- * main - prints single digit combinations
+ * main - Prints combinations of single digits
  * Return: Always 0
  */
 int main(void)
 {
 	int i;
 
-	for (i = 48; i < 58; i++)
+	for (i = 48; i <= 57; i++)
 	{
 		putchar(i);
 		if (i != 57)
