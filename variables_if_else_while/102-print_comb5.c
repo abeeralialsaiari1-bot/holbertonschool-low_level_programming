@@ -1,13 +1,11 @@
 #include <stdio.h>
-
 /**
- * main - Prints combinations of two two-digit numbers
+ * main - prints combinations of two 2-digit numbers
  * Return: Always 0
  */
 int main(void)
 {
 	int i, j;
-
 	for (i = 0; i <= 98; i++)
 	{
 		for (j = i + 1; j <= 99; j++)

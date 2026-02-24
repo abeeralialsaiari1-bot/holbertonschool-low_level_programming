@@ -1,15 +1,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-
 /**
- * main - Prints the last digit of n and some conditions
+ * main - prints the last digit of n
  * Return: Always 0
  */
 int main(void)
 {
 	int n, last;
-
 	srand(time(0));
 	n = rand() - RAND_MAX / 2;
 	last = n % 10;

@@ -1,13 +1,11 @@
 #include <stdio.h>
-
 /**
- * main - Prints combinations of three digits
+ * main - prints combinations of three digits
  * Return: Always 0
  */
 int main(void)
 {
 	int i, j, k;
-
 	for (i = 48; i <= 55; i++)
 	{
 		for (j = i + 1; j <= 56; j++)
