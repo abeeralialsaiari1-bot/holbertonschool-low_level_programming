@@ -1,11 +1,9 @@
 #include "main.h"
 #include <stdlib.h>
-
 char *_strdup(char *str)
 {
 	char *dup;
 	unsigned int i, len = 0;
-
 	if (str == NULL)
 		return (NULL);
 	while (str[len])
