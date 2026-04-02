@@ -54,6 +54,27 @@ void errors(void)
 }
 
 /**
+ * print_result - prints the result
+ * @result: array of integers
+ * @len: length of the array
+ */
+void print_result(int *result, int len)
+{
+	int i, a = 0;
+
+	for (i = 0; i < len - 1; i++)
+	{
+		if (result[i])
+			a = 1;
+		if (a)
+			_putchar(result[i] + '0');
+	}
+	if (!a)
+		_putchar('0');
+	_putchar('\n');
+}
+
+/**
  * main - multiplies two positive numbers
  * @argc: number of arguments
  * @argv: array of arguments
@@ -63,12 +84,14 @@ void errors(void)
 int main(int argc, char *argv[])
 {
 	char *s1, *s2;
-	int len1, len2, len, i, carry, digit1, digit2, *result, a = 0;
+	int len1, len2, len, i, carry, digit1, digit2, *result;
 
 	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
 		errors();
-	s1 = argv[1], s2 = argv[2];
-	len1 = _strlen(s1), len2 = _strlen(s2);
+	s1 = argv[1];
+	s2 = argv[2];
+	len1 = _strlen(s1);
+	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
 	result = malloc(sizeof(int) * len);
 	if (!result)
@@ -89,16 +112,7 @@ int main(int argc, char *argv[])
 		if (carry > 0)
 			result[len1 + len2 + 1] += carry;
 	}
-	for (i = 0; i < len - 1; i++)
-	{
-		if (result[i])
-			a = 1;
-		if (a)
-			_putchar(result[i] + '0');
-	}
-	if (!a)
-		_putchar('0');
-	_putchar('\n');
+	print_result(result, len);
 	free(result);
 	return (0);
 }
