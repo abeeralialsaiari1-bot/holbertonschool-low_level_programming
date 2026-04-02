@@ -13,6 +13,8 @@ int is_digit(char *s)
 {
 	int i = 0;
 
+	if (*s == '\0')
+		return (0);
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -55,8 +57,9 @@ void errors(void)
  */
 void _print(int *result, int len)
 {
-	int i, a = 0;
+	int i, a;
 
+	a = 0;
 	for (i = 0; i < len; i++)
 	{
 		if (result[i])
@@ -81,17 +84,22 @@ int main(int argc, char *argv[])
 	char *s1, *s2;
 	int len1, len2, len, i, j, carry, digit1, digit2, *result;
 
-	if (argc != 3)
+	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
 		errors();
-	s1 = argv[1], s2 = argv[2];
-	if (s1[0] == '\0' || s2[0] == '\0' || !is_digit(s1) || !is_digit(s2))
-		errors();
-	len1 = _strlen(s1), len2 = _strlen(s2), len = len1 + len2;
+
+	s1 = argv[1];
+	s2 = argv[2];
+	len1 = _strlen(s1);
+	len2 = _strlen(s2);
+	len = len1 + len2;
+
 	result = malloc(sizeof(int) * len);
 	if (!result)
 		return (1);
+
 	for (i = 0; i < len; i++)
 		result[i] = 0;
+
 	for (i = len1 - 1; i >= 0; i--)
 	{
 		digit1 = s1[i] - '0';
@@ -106,6 +114,7 @@ int main(int argc, char *argv[])
 		if (carry > 0)
 			result[i + j + 1] += carry;
 	}
+
 	_print(result, len);
 	free(result);
 	return (0);
