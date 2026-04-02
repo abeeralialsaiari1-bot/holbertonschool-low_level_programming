@@ -67,10 +67,8 @@ int main(int argc, char *argv[])
 
 	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
 		errors();
-	s1 = argv[1];
-	s2 = argv[2];
-	len1 = _strlen(s1);
-	len2 = _strlen(s2);
+	s1 = argv[1], s2 = argv[2];
+	len1 = _strlen(s1), len2 = _strlen(s2);
 	len = len1 + len2 + 1;
 	result = malloc(sizeof(int) * len);
 	if (!result)
