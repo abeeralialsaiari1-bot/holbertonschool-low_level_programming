@@ -4,17 +4,15 @@
 int _putchar(char c);
 
 /**
- * is_digit - checks if a string contains only digits
+ * is_digit - checks if a string contains a non-digit
  * @s: string to be evaluated
  *
- * Return: 1 if all digits, 0 otherwise
+ * Return: 0 if a non-digit is found, 1 otherwise
  */
 int is_digit(char *s)
 {
 	int i = 0;
 
-	if (*s == '\0')
-		return (0);
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -51,6 +49,27 @@ void errors(void)
 }
 
 /**
+ * _print - prints the array result
+ * @result: the array
+ * @len: length of the array
+ */
+void _print(int *result, int len)
+{
+	int i, a = 0;
+
+	for (i = 0; i < len; i++)
+	{
+		if (result[i])
+			a = 1;
+		if (a)
+			_putchar(result[i] + '0');
+	}
+	if (!a)
+		_putchar('0');
+	_putchar('\n');
+}
+
+/**
  * main - multiplies two positive numbers
  * @argc: number of arguments
  * @argv: array of arguments
@@ -60,17 +79,14 @@ void errors(void)
 int main(int argc, char *argv[])
 {
 	char *s1, *s2;
-	int len1, len2, len, i, j, carry, digit1, digit2, *result, a = 0;
+	int len1, len2, len, i, j, carry, digit1, digit2, *result;
 
 	if (argc != 3)
 		errors();
-	s1 = argv[1];
-	s2 = argv[2];
-	if (!is_digit(s1) || !is_digit(s2))
+	s1 = argv[1], s2 = argv[2];
+	if (s1[0] == '\0' || s2[0] == '\0' || !is_digit(s1) || !is_digit(s2))
 		errors();
-	len1 = _strlen(s1);
-	len2 = _strlen(s2);
-	len = len1 + len2;
+	len1 = _strlen(s1), len2 = _strlen(s2), len = len1 + len2;
 	result = malloc(sizeof(int) * len);
 	if (!result)
 		return (1);
@@ -90,16 +106,7 @@ int main(int argc, char *argv[])
 		if (carry > 0)
 			result[i + j + 1] += carry;
 	}
-	for (i = 0; i < len; i++)
-	{
-		if (result[i])
-			a = 1;
-		if (a)
-			_putchar(result[i] + '0');
-	}
-	if (!a)
-		_putchar('0');
-	_putchar('\n');
+	_print(result, len);
 	free(result);
 	return (0);
 }
