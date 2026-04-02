@@ -9,9 +9,10 @@
  */
 int is_digit(char *s)
 {
-	int i;
+	int i = 0;
 
-	i = 0;
+	if (!s || s[0] == '\0')
+		return (0);
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -29,75 +30,67 @@ int is_digit(char *s)
  */
 int _strlen(char *s)
 {
-	int i;
+	int i = 0;
 
-	i = 0;
 	while (s[i] != '\0')
-	{
 		i++;
-	}
 	return (i);
 }
 
 /**
- * errors - handles errors for main
+ * errors - handles errors for main and exits with 98
  */
 void errors(void)
 {
-	char *err1;
-	int i;
+	char *err = "Error\n";
+	int i = 0;
 
-	err1 = "Error";
-	i = 0;
-	while (err1[i])
+	while (err[i])
 	{
-		_putchar(err1[i]);
+		_putchar(err[i]);
 		i++;
 	}
-	_putchar('\n');
 	exit(98);
 }
 
 /**
- * multiply - multiplies two strings and prints the result
+ * multiply - multiplies two strings of numbers
  * @s1: first string
  * @s2: second string
  */
 void multiply(char *s1, char *s2)
 {
-	int len1, len2, len, carry;
+	int len1, len2, len, i, j, res, carry;
 	int *result;
 
 	len1 = _strlen(s1);
 	len2 = _strlen(s2);
-	len = len1 + len2 + 1;
+	len = len1 + len2;
 	result = malloc(sizeof(int) * len);
 	if (!result)
 		exit(98);
-	for (carry = 0; carry <= len1 + len2; carry++)
-		result[carry] = 0;
-	for (len1 = len1 - 1; len1 >= 0; len1--)
+	for (i = 0; i < len; i++)
+		result[i] = 0;
+	for (i = len1 - 1; i >= 0; i--)
 	{
 		carry = 0;
-		for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
+		for (j = len2 - 1; j >= 0; j--)
 		{
-			carry += result[len1 + len2 + 1];
-			carry += (s1[len1] - '0') * (s2[len2] - '0');
-			result[len1 + len2 + 1] = carry % 10;
-			carry /= 10;
+			res = (s1[i] - '0') * (s2[j] - '0') + result[i + j + 1] + carry;
+			carry = res / 10;
+			result[i + j + 1] = res % 10;
 		}
-		if (carry > 0)
-			result[len1 + len2 + 1] += carry;
+		result[i + j + 1] += carry;
 	}
-	carry = 0;
-	for (len1 = 0; len1 < len - 1; len1++)
+	res = 0;
+	for (i = 0; i < len; i++)
 	{
-		if (result[len1])
-			carry = 1;
-		if (carry)
-			_putchar(result[len1] + '0');
+		if (result[i])
+			res = 1;
+		if (res)
+			_putchar(result[i] + '0');
 	}
-	if (!carry)
+	if (!res)
 		_putchar('0');
 	_putchar('\n');
 	free(result);
@@ -112,14 +105,8 @@ void multiply(char *s1, char *s2)
  */
 int main(int argc, char *argv[])
 {
-	char *s1, *s2;
-
-	if (argc != 3)
+	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
 		errors();
-	if (!is_digit(argv[1]) || !is_digit(argv[2]))
-		errors();
-	s1 = argv[1];
-	s2 = argv[2];
-	multiply(s1, s2);
+	multiply(argv[1], argv[2]);
 	return (0);
 }
