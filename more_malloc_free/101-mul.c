@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 
 int _putchar(char c);
 
@@ -13,8 +12,6 @@ int is_digit(char *s)
 {
 	int i = 0;
 
-	if (*s == '\0')
-		return (0);
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -46,7 +43,14 @@ int _strlen(char *s)
  */
 void errors(void)
 {
-	printf("Error\n");
+	char *err = "Error\n";
+	int i = 0;
+
+	while (err[i])
+	{
+		_putchar(err[i]);
+		i++;
+	}
 	exit(98);
 }
 
@@ -57,9 +61,8 @@ void errors(void)
  */
 void _print(int *result, int len)
 {
-	int i, a;
+	int i, a = 0;
 
-	a = 0;
 	for (i = 0; i < len; i++)
 	{
 		if (result[i])
@@ -84,11 +87,15 @@ int main(int argc, char *argv[])
 	char *s1, *s2;
 	int len1, len2, len, i, j, carry, digit1, digit2, *result;
 
-	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
+	if (argc != 3)
 		errors();
 
 	s1 = argv[1];
 	s2 = argv[2];
+
+	if (s1[0] == '\0' || s2[0] == '\0' || !is_digit(s1) || !is_digit(s2))
+		errors();
+
 	len1 = _strlen(s1);
 	len2 = _strlen(s2);
 	len = len1 + len2;
