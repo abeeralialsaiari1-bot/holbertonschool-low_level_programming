@@ -1,6 +1,5 @@
 #include "main.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 /**
  * is_digit - checks if a string contains a non-digit char
@@ -41,7 +40,14 @@ int _strlen(char *s)
  */
 void errors(void)
 {
-	printf("Error\n");
+	char *s = "Error\n";
+	int i = 0;
+
+	while (s[i])
+	{
+		_putchar(s[i]);
+		i++;
+	}
 	exit(98);
 }
 
@@ -55,7 +61,7 @@ void errors(void)
 int main(int argc, char *argv[])
 {
 	char *s1, *s2;
-	int len1, len2, len, i, carry, digit1, digit2, *res, a = 0;
+	int len1, len2, len, i, j, carry, digit1, digit2, *res, a = 0;
 
 	s1 = argv[1], s2 = argv[2];
 	if (argc != 3 || !is_digit(s1) || !is_digit(s2))
@@ -66,21 +72,21 @@ int main(int argc, char *argv[])
 	res = malloc(sizeof(int) * len);
 	if (!res)
 		return (1);
-	for (i = 0; i <= len1 + len2; i++)
+	for (i = 0; i < len; i++)
 		res[i] = 0;
-	for (len1 = len1 - 1; len1 >= 0; len1--)
+	for (i = len1 - 1; i >= 0; i--)
 	{
-		digit1 = s1[len1] - '0';
+		digit1 = s1[i] - '0';
 		carry = 0;
-		for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
+		for (j = len2 - 1; j >= 0; j--)
 		{
-			digit2 = s2[len2] - '0';
-			carry += res[len1 + len2 + 1] + (digit1 * digit2);
-			res[len1 + len2 + 1] = carry % 10;
+			digit2 = s2[j] - '0';
+			carry += res[i + j + 1] + (digit1 * digit2);
+			res[i + j + 1] = carry % 10;
 			carry /= 10;
 		}
 		if (carry > 0)
-			res[len1 + len2 + 1] += carry;
+			res[i + j + 1] += carry;
 	}
 	for (i = 0; i < len; i++)
 	{
