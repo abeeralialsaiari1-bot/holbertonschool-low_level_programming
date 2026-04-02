@@ -54,7 +54,7 @@ void errors(void)
 }
 
 /**
- * print_result - prints the result
+ * print_result - prints the array
  * @result: array of integers
  * @len: length of the array
  */
@@ -75,37 +75,30 @@ void print_result(int *result, int len)
 }
 
 /**
- * main - multiplies two positive numbers
- * @argc: number of arguments
- * @argv: array of arguments
- *
- * Return: always 0 (Success)
+ * multiply - multiplies two strings and prints the result
+ * @s1: first string
+ * @s2: second string
  */
-int main(int argc, char *argv[])
+void multiply(char *s1, char *s2)
 {
-	char *s1, *s2;
-	int len1, len2, len, i, carry, digit1, digit2, *result;
+	int len1, len2, len, carry;
+	int *result;
 
-	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
-		errors();
-	s1 = argv[1];
-	s2 = argv[2];
 	len1 = _strlen(s1);
 	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
 	result = malloc(sizeof(int) * len);
 	if (!result)
-		return (1);
-	for (i = 0; i <= len1 + len2; i++)
-		result[i] = 0;
+		exit(98);
+	for (carry = 0; carry < len; carry++)
+		result[carry] = 0;
 	for (len1 = len1 - 1; len1 >= 0; len1--)
 	{
-		digit1 = s1[len1] - '0';
 		carry = 0;
 		for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
 		{
-			digit2 = s2[len2] - '0';
-			carry += result[len1 + len2 + 1] + (digit1 * digit2);
+			carry += result[len1 + len2 + 1];
+			carry += (s1[len1] - '0') * (s2[len2] - '0');
 			result[len1 + len2 + 1] = carry % 10;
 			carry /= 10;
 		}
@@ -114,5 +107,21 @@ int main(int argc, char *argv[])
 	}
 	print_result(result, len);
 	free(result);
+}
+
+/**
+ * main - multiplies two positive numbers
+ * @argc: number of arguments
+ * @argv: array of arguments
+ *
+ * Return: always 0 (Success)
+ */
+int main(int argc, char *argv[])
+{
+	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
+		errors();
+
+	multiply(argv[1], argv[2]);
+
 	return (0);
 }
