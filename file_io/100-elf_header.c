@@ -47,17 +47,10 @@ void print_class(unsigned char *e_ident)
 	printf("  Class:                             ");
 	switch (e_ident[EI_CLASS])
 	{
-	case ELFCLASSNONE:
-		printf("none\n");
-		break;
-	case ELFCLASS32:
-		printf("ELF32\n");
-		break;
-	case ELFCLASS64:
-		printf("ELF64\n");
-		break;
-	default:
-		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
+	case ELFCLASSNONE: printf("none\n"); break;
+	case ELFCLASS32: printf("ELF32\n"); break;
+	case ELFCLASS64: printf("ELF64\n"); break;
+	default: printf("<unknown: %x>\n", e_ident[EI_CLASS]);
 	}
 }
 
@@ -66,24 +59,16 @@ void print_data(unsigned char *e_ident)
 	printf("  Data:                              ");
 	switch (e_ident[EI_DATA])
 	{
-	case ELFDATANONE:
-		printf("none\n");
-		break;
-	case ELFDATA2LSB:
-		printf("2's complement, little endian\n");
-		break;
-	case ELFDATA2MSB:
-		printf("2's complement, big endian\n");
-		break;
-	default:
-		printf("<unknown: %x>\n", e_ident[EI_DATA]);
+	case ELFDATANONE: printf("none\n"); break;
+	case ELFDATA2LSB: printf("2's complement, little endian\n"); break;
+	case ELFDATA2MSB: printf("2's complement, big endian\n"); break;
+	default: printf("<unknown: %x>\n", e_ident[EI_DATA]);
 	}
 }
 
 void print_version(unsigned char *e_ident)
 {
-	printf("  Version:                           %d",
-	       e_ident[EI_VERSION]);
+	printf("  Version:                           %d", e_ident[EI_VERSION]);
 	if (e_ident[EI_VERSION] == EV_CURRENT)
 		printf(" (current)\n");
 	else
@@ -95,17 +80,17 @@ void print_osabi(unsigned char *e_ident)
 	printf("  OS/ABI:                            ");
 	switch (e_ident[EI_OSABI])
 	{
-	case ELFOSABI_NONE:
-		printf("UNIX - System V\n");
-		break;
-	case ELFOSABI_NETBSD:
-		printf("UNIX - NetBSD\n");
-		break;
-	case ELFOSABI_SOLARIS:
-		printf("UNIX - Solaris\n");
-		break;
-	default:
-		printf("<unknown: %x>\n", e_ident[EI_OSABI]);
+	case ELFOSABI_NONE: printf("UNIX - System V\n"); break;
+	case ELFOSABI_HPUX: printf("UNIX - HP-UX\n"); break;
+	case ELFOSABI_NETBSD: printf("UNIX - NetBSD\n"); break;
+	case ELFOSABI_LINUX: printf("UNIX - Linux\n"); break;
+	case ELFOSABI_SOLARIS: printf("UNIX - Solaris\n"); break;
+	case ELFOSABI_IRIX: printf("UNIX - IRIX\n"); break;
+	case ELFOSABI_FREEBSD: printf("UNIX - FreeBSD\n"); break;
+	case ELFOSABI_TRU64: printf("UNIX - TRU64\n"); break;
+	case ELFOSABI_ARM: printf("UNIX - ARM\n"); break;
+	case ELFOSABI_STANDALONE: printf("Standalone App\n"); break;
+	default: printf("<unknown: %x>\n", e_ident[EI_OSABI]);
 	}
 }
 
@@ -138,25 +123,25 @@ void print_type(unsigned char *e_ident, unsigned char *e_type_p)
 
 void print_entry(unsigned char *e_ident, unsigned char *e_entry_p)
 {
-	int i;
-	int size = (e_ident[EI_CLASS] == ELFCLASS32) ? 4 : 8;
+	unsigned long int entry = 0;
+	int i, size;
 
-	printf("  Entry point address:               0x");
+	size = (e_ident[EI_CLASS] == ELFCLASS32) ? 4 : 8;
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
-		i = 0;
-		while (i < size && e_entry_p[i] == 0) i++;
-		if (i == size) printf("0");
-		for (; i < size; i++) printf("%x", e_entry_p[i]);
+		for (i = 0; i < size; i++)
+			entry = (entry << 8) | e_entry_p[i];
 	}
 	else
 	{
-		i = size - 1;
-		while (i >= 0 && e_entry_p[i] == 0) i--;
-		if (i == -1) printf("0");
-		for (; i >= 0; i--) printf("%02x", e_entry_p[i]);
+		for (i = size - 1; i >= 0; i--)
+			entry = (entry << 8) | e_entry_p[i];
 	}
-	printf("\n");
+
+	if (e_ident[EI_CLASS] == ELFCLASS32)
+		printf("  Entry point address:               0x%x\n", (unsigned int)entry);
+	else
+		printf("  Entry point address:               0x%lx\n", entry);
 }
 
 void close_elf(int elf)
@@ -185,7 +170,7 @@ int main(int argc, char *argv[])
 		exit(98);
 	}
 	r = read(fd, &h, sizeof(h));
-	if (r < 1 || (unsigned int)r < EI_NIDENT)
+	if (r < (ssize_t)sizeof(h.e_ident))
 	{
 		close_elf(fd);
 		dprintf(STDERR_FILENO, "Error: read failed\n");
